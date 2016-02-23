@@ -48,7 +48,7 @@ using namespace mpfr;
 #include <string.h>
 
 // atan
-// sum =  x - x3/3 + x5/5 - x7/7 + x9/9 - x11/11 ...
+// atan(x) =  x - x^3/3 + x^5/5 - x^7/7 + x^9/9 - x^11/11 ...
 
 template <typename T>
 T my_atan_gen2(const T & x, const T & eps) {
