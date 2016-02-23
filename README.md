@@ -10,5 +10,8 @@ atan(x) =  x - x^3/3 + x^5/5 - x^7/7 + x^9/9 - x^11/11 ...
 The code is written using C++ generic (template), where both "double" and "mpreal" can be used.
 "mpreal" is a C++ class that represents a float point number with precision as large as necessary.
 
+To compile, install libraries gmp, gmpxx, mpfr, mpreal and use script below
+
+g++ -std=c++11 -I /usr/local/include -L/usr/local/lib/ pi_calc_gen.cpp -lgmp -lgmpxx -lmpfr -o pi_calc_gen
 
 
