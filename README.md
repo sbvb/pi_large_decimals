@@ -5,7 +5,7 @@ based on gnu libraries of infinite precision - gmp, gmpxx, mpfr, mpreal
 The pi value is calculated as pi=8.0*atan(sqrt(2.0)-1.0);
 
 The atan function is calculated by expanding the Taylor Series
-atan(x) =  x - x^3/3 + x^5/5 - x^7/7 + x^9/9 - x^11/11 ...
+atan(x) =  x - x^3/3.0 + x^5/5.0 - x^7/7.0 + x^9/9.0 - x^11/11.0 ...
 
 The code is written using C++ generic (template), where both "double" and "mpreal" can be used.
 "mpreal" is a C++ class that represents a float point number with precision as large as necessary.
