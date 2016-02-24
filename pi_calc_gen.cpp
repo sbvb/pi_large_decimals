@@ -29,7 +29,7 @@ value of pi, to chech result
    71010003137838752886587533208381420617177669147303
    59825349042875546873115956286388235378759375195778
    18577805321712268066130019278766111959092164201989
-*/
+ */
 
 
 
@@ -52,91 +52,89 @@ using namespace mpfr;
 
 template <typename T>
 T my_atan_gen2(const T & x, const T & eps) {
-// static T my_atan_gen2(const T & x) {
-	// T eps = T("1e-20");
-	T signal = T(-1.0);
-	T ret = x;
-	// mpreal eps = mpreal("1e-20");
-	T num = x * x * x;
-	T den = T(3.0);
+    // static T my_atan_gen2(const T & x) {
+    // T eps = T("1e-20");
+    T signal = T(-1.0);
+    T ret = x;
+    // mpreal eps = mpreal("1e-20");
+    T num = x * x * x;
+    T den = T(3.0);
 
-	T factor = num/den;
-	int iterace = 0;
+    T factor = num / den;
+    int iterace = 0;
 
     while (fabs(factor) > fabs(eps * x)) {
         ret += signal * factor;
         num = num * x * x;
         den += T(2.0);
-        factor = num/den;
+        factor = num / den;
         signal *= T(-1.0);
         iterace++;
-	    // cout << "DEBUG iterace=" << iterace << ", factor=" << factor << ", den=" << den << ", num=" << num << endl;
+        // cout << "DEBUG iterace=" << iterace << ", factor=" << factor << ", den=" << den << ", num=" << num << endl;
     }
     return ret;
 };
 
 template <typename T>
-struct MyTrait
-{
-	static T str2real(const char *epsStr) {
-		return T(epsStr);
-	}
+struct MyTrait {
+
+    static T str2real(const char *epsStr) {
+        return T(epsStr);
+    }
 }; // end of MyTrait
 
 template <>
-struct MyTrait<double>
-{
-	static double str2real(const char *epsStr) {
-		ostringstream oss;
-		oss << epsStr;
-		double ret = atof(oss.str().c_str());
-		return ret;
-	}
+struct MyTrait<double> {
+
+    static double str2real(const char *epsStr) {
+        ostringstream oss;
+        oss << epsStr;
+        double ret = atof(oss.str().c_str());
+        return ret;
+    }
 }; // end of MyTrait
 
 template<typename T>
-T my_atan_gen(const T & x, const char *epsStr = "1e-50")
-{
-	T eps = MyTrait<T>::str2real(epsStr);
-	// return MyTrait<T>::my_atan_gen2(x,eps);
-	return my_atan_gen2(x,eps);
+T my_atan_gen(const T & x, const char *epsStr = "1e-50") {
+    T eps = MyTrait<T>::str2real(epsStr);
+    // return MyTrait<T>::my_atan_gen2(x,eps);
+    return my_atan_gen2(x, eps);
 };
 
-
 void test_my_atan_gen() {
-	cout << "=== test_my_atan_gen()" << endl;
-	mpreal::set_default_prec(1660);
+    cout << "=== test_my_atan_gen()" << endl;
+    mpreal::set_default_prec(1660);
 
     for (mpreal x = mpreal("0.0"); x < mpreal("0.5"); x += mpreal("0.1")) {
-    	double ax = atan(x.toDouble());
-    	double maxd = my_atan_gen<double>(x.toDouble(),"1e-50");
-    	mpreal max = my_atan_gen<mpreal>(x,"1e-50");
-    	// double maxd = my_atan_gen<double>(x.toDouble());
-    	// mpreal max = my_atan_gen<mpreal>(x);
-    	cout << setprecision(20) << "x=" << x << ", atan(x)=" << ax << ", my_atan_gen<double>(x)=" << maxd << ", my_atan_gen<mpreal>(x)=" << max << ", diff=" << ax-max << endl;
+        double ax = atan(x.toDouble());
+        double maxd = my_atan_gen<double>(x.toDouble(), "1e-50");
+        mpreal max = my_atan_gen<mpreal>(x, "1e-50");
+        // double maxd = my_atan_gen<double>(x.toDouble());
+        // mpreal max = my_atan_gen<mpreal>(x);
+        cout << setprecision(20) << "x=" << x << ", atan(x)=" << ax << ", my_atan_gen<double>(x)=" << maxd << ", my_atan_gen<mpreal>(x)=" << max << ", diff=" << ax - max << endl;
     }
 
 }
 
 // decs = number of decimals of precision
-void my_pi(int decs = 5500) {
-	cout << "=== my_pi()" << endl;
-  mpreal::set_default_prec(4*decs);
 
-	mpreal x = sqrt(mpreal("2.0"))-mpreal("1.0");
-	ostringstream eps_oss;
-	eps_oss << "1e-" << decs;
-	cout << "pi shown with " << decs << " decimals" << endl;
-	mpreal my_pi = mpreal("8.0")*my_atan_gen<mpreal>(x,eps_oss.str().c_str());
+void my_pi(int decs = 5500) {
+    cout << "=== my_pi()" << endl;
+    mpreal::set_default_prec(4 * decs);
+
+    mpreal x = sqrt(mpreal("2.0")) - mpreal("1.0");
+    ostringstream eps_oss;
+    eps_oss << "1e-" << decs;
+    cout << "pi shown with " << decs << " decimals" << endl;
+    mpreal my_pi = mpreal("8.0") * my_atan_gen<mpreal>(x, eps_oss.str().c_str());
     cout << setprecision(decs) << my_pi << endl;
 }
 
-
 int main() {
-	cout << "====== sbVB pi calc" << endl;
-	my_pi(1000);
+    cout << "====== sbVB pi calc" << endl;
+    my_pi(1000);
 
-  return 0;
+    return 0;
 }
 
 
